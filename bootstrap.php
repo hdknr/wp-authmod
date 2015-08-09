@@ -1,6 +1,6 @@
 <?php
 
-function _main(){
+function _app(){
     spl_autoload_register(array('ClassLoader', 'loadClass'));
     return \Authmod\App::get_instance();
 }

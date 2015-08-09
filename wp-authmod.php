@@ -15,6 +15,5 @@ add_action( 'plugins_loaded', '_bootstrap');
 
 function _bootstrap(){
     require_once dirname(__FILE__).DIRECTORY_SEPARATOR . "bootstrap.php";
-    $app = _main(); 
-    add_filter('the_title', array($app, 'filter_the_title'));
+    $app = _app(); 
 }
