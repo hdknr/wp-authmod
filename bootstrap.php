@@ -1,0 +1,38 @@
+<?php
+
+function _main(){
+    spl_autoload_register(array('ClassLoader', 'loadClass'));
+    return \Authmod\App::get_instance();
+}
+
+class ClassLoader
+{
+    public static function loadClass($class)
+    {
+        foreach (self::directories() as $directory) {
+            $file_name = str_replace(
+                "\\", "/", 
+                $directory.DIRECTORY_SEPARATOR.$class.".php");
+
+            if (is_file($file_name)) {
+                require $file_name;
+                return true;
+            }
+        }
+    }
+
+    private static $dirs;
+
+    private static function directories()
+    {
+        if (empty(self::$dirs)) {
+            $base = __DIR__;
+            self::$dirs = array(
+                $base,
+            );
+        }
+
+        return self::$dirs;
+    }
+}
+

@@ -18,3 +18,7 @@
 npm install -g grunt-cli
 pip install shyaml
 ~~~
+
+~~~bash
+./composer.phar require phpunit/phpunit
+~~~
