@@ -11,3 +11,10 @@
 - `sudo ln -s $PWD/conf/nginx.conf /etc/nginx/sites-enabled/your_wp_cname.conf`
 - `sudo /etc/init.d/nginx start`
 - `mv wp-authmod www/wordpress/wp-content/plugins`
+
+# Requries
+
+~~~bash
+npm install -g grunt-cli
+pip install shyaml
+~~~
