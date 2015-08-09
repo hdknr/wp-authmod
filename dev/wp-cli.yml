@@ -1,0 +1,12 @@
+path: www/wordpress
+
+core config:
+    dbuser: your_wp_dbuser
+    dbname: your_wp_dbname
+    dbpass: your_wp_dbpass
+
+url: http://your_wp_cname/wordpress
+title : Tiltle
+admin_user: admin
+admin_password: admin
+admin_email: admin@admin.admin
