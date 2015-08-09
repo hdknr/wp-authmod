@@ -15,5 +15,5 @@ add_action( 'plugins_loaded', '_bootstrap');
 
 function _bootstrap(){
     require_once dirname(__FILE__).DIRECTORY_SEPARATOR . "bootstrap.php";
-    $app = _app(); 
+    $GLOBALS['wp-authmod-plugin'] = _app(); 
 }

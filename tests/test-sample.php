@@ -2,9 +2,18 @@
 
 class SampleTest extends WP_UnitTestCase {
 
-	function test_sample() {
-		// replace this with some actual testing code
-		$this->assertTrue( true );
+    private $plugin = null;
+    function setUp() {
+        parent::setUp();
+        $this->plugin = $GLOBALS['wp-authmod-plugin'];
+    }
+
+	function test_filter_the_title() {
+        $title = "hoge";
+		$this->assertEquals( 
+            $this->plugin->filter_the_title($title),
+            "$title (debugging)"
+        );
 	}
 }
 
