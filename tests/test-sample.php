@@ -15,5 +15,9 @@ class SampleTest extends WP_UnitTestCase {
             "$title (debugging)"
         );
 	}
+
+    function test_page1(){
+        self::go_to("http://localhost/?p=1);
+    }
 }
 
