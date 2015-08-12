@@ -3,8 +3,7 @@ namespace Authmod;
 
 class App extends Base {
 
-    protected $_filters = [
-        'the_title', 'query_vars', ];
+    protected $_filters = ['the_title', 'query_vars'];
 
     function __construct(array $argument = array()) {
         foreach($this->_filters as $filter){
@@ -17,7 +16,7 @@ class App extends Base {
     } 
 
     function filter_query_vars($qvars){
-        var_dump($qvars);
+        echo "filter_query_vars......\n";
         return $qvars;
     }
 }

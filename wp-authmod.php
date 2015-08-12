@@ -1,6 +1,6 @@
 <?php
 /*
-Plugin Name: Wp-authmod
+Plugin Name: wp-authmod
 Version: 0.1-alpha
 Description: Wordpress Authentication Module
 Author: Hideki Nara
