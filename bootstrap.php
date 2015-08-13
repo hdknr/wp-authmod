@@ -1,10 +1,5 @@
 <?php
 
-function _app(){
-    spl_autoload_register(array('ClassLoader', 'loadClass'));
-    return \Authmod\App::get_instance();
-}
-
 class ClassLoader
 {
     public static function loadClass($class)
@@ -34,5 +29,9 @@ class ClassLoader
 
         return self::$dirs;
     }
-}
 
+    public static function app_instance($appclass_name){
+        spl_autoload_register(array('ClassLoader', 'loadClass'));
+        return call_user_func(array($appclass_name, 'get_instance'));
+    }
+}
