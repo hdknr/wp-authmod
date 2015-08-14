@@ -1,18 +1,43 @@
 <?php class SampleTest extends WP_UnitTestCase {
+    protected $backupGlobalsBlacklist = ['wp_filter'];
 
     private $plugin = null;             // plugin 
 
     function setUp() {
         parent::setUp();
-        $this->plugin = $GLOBALS['wp-authmod-plugin'];
+        // $this->plugin = $GLOBALS['wp-authmod-plugin'];
+
+    }
+
+    function expected_errors($error_messages) {
+        $this->expected_error_list = (array) $error_messages;
+        set_error_handler(
+            array(&$this, 'expected_errors_handler'));
+    }
+
+    function expected_errors_handler($errno, $errstr) {
+        foreach ($this->expected_error_list as $expect) {
+            if (strpos($errstr, $expect) !== false) {
+                $this->expected_errors_found = true;
+                return true;
+            }
+        }
+        return false;
+    }
+
+    function were_expected_errors_found() {
+        restore_error_handler();
+        return $this->expected_errors_found;
     }
 
 	function test_filter_the_title() {
+        /*1
         $title = "hoge";
 		$this->assertEquals( 
             $this->plugin->filter_the_title($title),
             "$title (debugging)"
         );
+        */
 	}
 
     /*
@@ -53,6 +78,23 @@
         $tables = $wpdb->get_var("SHOW TABLES");
         var_dump($tables);
     }
-    
-}
 
+    /**
+     */
+    function test_authcookie() {
+        /* phpunit --filter 'SampleTest::test_authcookie'
+        */
+        $this->expected_errors('Cannot modify header information');
+
+        $user_id = $this->factory->user->create();
+       
+        // https://codex.wordpress.org/Function_Reference/is_user_logged_in
+        // $this->assertFalse(is_user_logged_in());
+
+        // https://codex.wordpress.org/Function_Reference/wp_set_auth_cookie
+        //wp_set_auth_cookie($user_id);
+        wp_set_current_user($user_id, 'user');
+
+        $this->assertTrue(is_user_logged_in());
+    }
+}

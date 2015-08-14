@@ -13,5 +13,6 @@ License: BSD
 
 add_action('plugins_loaded', function(){
     require_once dirname(__FILE__).DIRECTORY_SEPARATOR . "bootstrap.php";
-    $GLOBALS['wp-authmod-plugin'] = ClassLoader::app_instance('\\Authmod\\App'); 
+    // $GLOBALS['wp-authmod-plugin'] = 
+    $app = ClassLoader::app_instance('\\Authmod\\App'); 
 });
