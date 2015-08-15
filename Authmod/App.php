@@ -3,29 +3,31 @@ namespace Authmod;
 
 class App extends AppBase {
     protected $admin = null;
+    protected $option = null;
 
     function __construct(array $argument = array()) {
         parent::__construct($argument);
         $this->admin = Admin::get_instance();
+        $this->option = Option::get_instance();
     }    
 
     function verify_hash($session_key, $id, $hash){
         if($hash == '') {
             return true;
         }
-        $alg = "sha256";                    // TODO: configuration
-        $key = 'this is the secret.';       // TODO: configuration
+        $alg = $this->option->hashalg_name;
+        $key = $this->option->shared_secret;
         $res = $hash == hash($alg, "$session_key$id$key");
         return $res;
     }
 
     function get_session_key(){
-        $name = 'sessionid';                // TODO: configuration
+        $name = $this->option->sessionid_name;
         return isset($_COOKIE[$name]) ? $_COOKIE[$name] : null;
     }
 
     function get_wp_user(){
-        $name = 'WP_USER';                  // TODO: configuration
+        $name = $this->option->usertoken_name;
         $wp_user = isset($_COOKIE[$name]) ? $_COOKIE[$name] : '';
         preg_match("/(?P<id>\d+):(?P<hash>[0-9a-f]*)/", $wp_user, $match);
         return $match == null ? array(null, null) : array($match['id'], $match['hash']);
