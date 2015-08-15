@@ -1,5 +1,31 @@
-<ul>
-  <li>aaaa</li>
-  <li>bbbb</li>
-  <li>cccc</li>
-</ul>
+<div class="wrap">
+  <h2>wp-authmod 設定</h2>
+  <form method="post">
+    <table class="form-table permalink-structure">
+
+      <tr>
+        <th><label for="shared_secret">共有パスワード</label></th>
+        <td> <input name="shared_secret" id="id_shared_secret" type="text" value="{{ form.shared_secret }}" class="regular-text code" /></td>
+      </tr>
+
+      <tr>
+        <th><label for="sessionid_name">セッションID名</label></th>
+        <td> <input name="sessionid_name" id="id_sessionid_name" type="text" value="{{ form.sessionid_name }}" class="regular-text code" /></td>
+      </tr>
+
+      <tr>
+        <th><label for="usertoken_name">ユーザートークン名</label></th>
+        <td> <input name="usertoken_name" id="id_usertoken_name" type="text" value="{{ form.usertoken_name }}" class="regular-text code" /></td>
+      </tr>
+
+      <tr>
+        <th><label for="hashalg_name">ハッシュ関数</label></th>
+        <td> <input name="hashalg_name" id="id_hashalg_name" type="text" value="{{ form.hashalg_name }}" class="regular-text code" /></td>
+      </tr>
+
+    </table>
+
+    <p class="submit"><input type="submit" name="submit" id="submit" class="button button-primary" value="変更を保存"  /></p>
+
+  </form>
+</div>

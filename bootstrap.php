@@ -4,8 +4,6 @@ class ClassLoader
 {
     public static function loadClass($class)
     {
-        error_log("loadClass($class)");
-
         foreach (self::directories() as $directory) {
             $file_name = str_replace(
                 "\\", "/", 
@@ -16,7 +14,6 @@ class ClassLoader
                 return true;
             }
         }
-
     }
 
     private static $dirs;

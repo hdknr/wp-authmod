@@ -10,9 +10,15 @@ class Admin extends Base {
         if ( !current_user_can( 'manage_options' ) )  {
             wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
         }
-        $data = \Timber::get_context();
-        $data['posts'] = \Timber::get_posts();
-        $data['foo'] = 'bar';
-        \Timber::render('Admin.html', $data);    
+        $ctx = \Timber::get_context();
+
+        if($_SERVER['REQUEST_METHOD'] == 'GET'){
+            $ctx['form'] = Option::get_instance()->get();
+        }else{
+            $ctx['form'] = $_POST;
+            Option::get_instance()->update($_POST);
+        }
+
+        \Timber::render('Admin.html', $ctx);    
     }
 }
