@@ -10,8 +10,9 @@ class Admin extends Base {
         if ( !current_user_can( 'manage_options' ) )  {
             wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
         }
-        echo '<div class="wrap">';
-        echo '<p>Here is where the form would go if I actually had options.</p>';
-        echo '</div>';
+        $data = \Timber::get_context();
+        $data['posts'] = \Timber::get_posts();
+        $data['foo'] = 'bar';
+        \Timber::render('Admin.html', $data);    
     }
 }
