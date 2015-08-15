@@ -3,27 +3,56 @@ namespace Authmod;
 
 class App extends AppBase {
 
+    function verify_hash($session_key, $id, $hash){
+        if($hash == '') {
+            return true;
+        }
+        $alg = "sha256";                    // TODO: configuration
+        $key = 'this is the secret.';       // TODO: configuration
+        $res = $hash == hash($alg, "$session_key$id$key");
+        return $res;
+    }
+
+    function get_session_key(){
+        $name = 'sessionid';                // TODO: configuration
+        return isset($_COOKIE[$name]) ? $_COOKIE[$name] : null;
+    }
+
+    function get_wp_user(){
+        $name = 'WP_USER';                  // TODO: configuration
+        $wp_user = isset($_COOKIE[$name]) ? $_COOKIE[$name] : '';
+        preg_match("/(?P<id>\d+):(?P<hash>[0-9a-f]*)/", $wp_user, $match);
+        return $match == null ? array(null, null) : array($match['id'], $match['hash']);
+    }
+
+    function force_logout(){
+        // https://codex.wordpress.org/Function_Reference/is_user_logged_in
+        // https://codex.wordpress.org/Function_Reference/wp_logout
+        if(is_user_logged_in()){
+            wp_logout();
+        }
+    }
+
     function force_auth(){
-        if(!isset($_COOKIE['WP_USER'])){
-            return;
+
+        list($id, $hash) = $this->get_wp_user();
+
+        if($id == null){
+            $this->force_logout();
+            return ;
         }
 
-        $wp_user = $_COOKIE['WP_USER'];
-        preg_match("/(?P<id>\d+):(?P<hash>[0-9a-f]*)/", $wp_user, $match);
-        if($match != null){
-            // TODO: Verify 'hash' if it is given with shared key
-            $user = get_user_by( 'id', $match['id']); 
-            if($user){
-                wp_set_current_user($match['id'], $user->user_login );
-                wp_set_auth_cookie($match['id']);
-                do_action('wp_login', $user->user_login);
+        if(($session_key = $this->get_session_key()) != null ){
+
+            if(!$this->verify_hash($session_key, $id, $hash)){
+                $this->force_logout();
+                return;
             }
-        }
-        else {
-            // https://codex.wordpress.org/Function_Reference/is_user_logged_in
-            // https://codex.wordpress.org/Function_Reference/wp_logout
-            if(is_user_logged_in()){
-                wp_logout();
+    
+            if(($user = get_user_by('id', $id)) != null){
+                wp_set_current_user($id, $user->user_login);
+                wp_set_auth_cookie($id);
+                do_action('wp_login', $user->user_login);
             }
         }
     }
