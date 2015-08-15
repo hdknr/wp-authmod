@@ -2,7 +2,7 @@
 namespace Authmod;
 
 class Option extends Base {
-    protected $key = "wp-auth";
+    protected $key = "wp-authmod";
     protected $option = array(
         'shared_secret' => '',
         'sessionid_name' => 'sessionid',
