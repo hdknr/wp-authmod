@@ -2,6 +2,12 @@
 namespace Authmod;
 
 class App extends AppBase {
+    protected $admin = null;
+
+    function __construct(array $argument = array()) {
+        parent::__construct($argument);
+        $this->admin = Admin::get_instance();
+    }    
 
     function verify_hash($session_key, $id, $hash){
         if($hash == '') {
@@ -61,5 +67,14 @@ class App extends AppBase {
         // https://codex.wordpress.org/Plugin_API/Action_Reference/send_headers
         error_log("action:send_header:");
         $this->force_auth();        // TODO: seek proper action 
+    }
+
+    function action_admin_menu(){
+        add_options_page(
+            'wp-authmod options', 
+            'wp-authmod', 
+            'manage_options', 
+            'wp-authmod', 
+            array($this->admin, 'options_page'));
     }
 }
