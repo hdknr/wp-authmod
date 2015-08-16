@@ -33,34 +33,26 @@ class App extends AppBase {
         return $match == null ? array(null, null) : array($match['id'], $match['hash']);
     }
 
-    function force_logout(){
-        // https://codex.wordpress.org/Function_Reference/is_user_logged_in
-        // https://codex.wordpress.org/Function_Reference/wp_logout
-        if(is_user_logged_in()){
-            wp_logout();
-        }
-    }
-
     function force_auth(){
 
         list($id, $hash) = $this->get_wp_user();
 
-        if($id == null){
-            $this->force_logout();
-            return ;
-        }
-
-        if(($session_key = $this->get_session_key()) != null ){
-
-            if(!$this->verify_hash($session_key, $id, $hash)){
-                $this->force_logout();
-                return;
+        // https://codex.wordpress.org/Function_Reference/is_user_logged_in
+        if(is_user_logged_in()){
+            if($id == null){
+                // https://codex.wordpress.org/Function_Reference/wp_logout
+                wp_logout();
+                return ;
             }
-    
-            if(($user = get_user_by('id', $id)) != null){
-                wp_set_current_user($id, $user->user_login);
-                wp_set_auth_cookie($id);
-                do_action('wp_login', $user->user_login);
+        } else { 
+            if(($session_key = $this->get_session_key()) != null ){
+                if($this->verify_hash($session_key, $id, $hash)){
+                    if(($user = get_user_by('id', $id)) != null){
+                        wp_set_current_user($id, $user->user_login);
+                        wp_set_auth_cookie($id);
+                        do_action('wp_login', $user->user_login);
+                    }
+                }
             }
         }
     }
