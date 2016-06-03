@@ -38,8 +38,9 @@ class App extends AppBase {
         list($id, $hash) = $this->get_wp_user();
 
         // https://codex.wordpress.org/Function_Reference/is_user_logged_in
-        if(is_user_logged_in()){
-            // do nothing
+        if(is_user_logged_in() && $id == null){
+            wp_logout();        
+            return ;
         } else { 
             if(($session_key = $this->get_session_key()) != null ){
                 if($this->verify_hash($session_key, $id, $hash)){
