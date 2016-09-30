@@ -39,7 +39,7 @@ class App extends AppBase {
 
         // https://codex.wordpress.org/Function_Reference/is_user_logged_in
         if(is_user_logged_in() && $id == null){
-            wp_logout();        
+            // wp_logout();        
             return ;
         } else { 
             if(($session_key = $this->get_session_key()) != null ){
